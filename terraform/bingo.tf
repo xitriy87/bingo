@@ -117,7 +117,6 @@ resource "yandex_compute_instance_group" "bingo-group" {
         network_id     = yandex_vpc_network.bingo.id
         subnet_ids = [yandex_vpc_subnet.bingo.id]
         nat = false
-#        ip_address = ["10.10.10.10", "10.10.10.11"]
       }
       boot_disk {
         initialize_params {
@@ -127,7 +126,7 @@ resource "yandex_compute_instance_group" "bingo-group" {
         }
       }
       metadata = {
-#        user-data = file("./cloud-init.yaml")
+        user-data = file("./cloud-init-bingo.yaml")
         docker-compose = file("${path.module}/docker-compose.yaml")
         ssh-keys  = "ubuntu:${file("~/.ssh/yc-test.pub")}"
       }
@@ -147,8 +146,8 @@ resource "yandex_compute_instance_group" "bingo-group" {
       max_deleting = 2
     }
     health_check {
-       interval = 8
-       timeout = 5
+       interval = 20
+       timeout = 15
        unhealthy_threshold = 2
        healthy_threshold = 2
        http_options {
@@ -160,6 +159,6 @@ resource "yandex_compute_instance_group" "bingo-group" {
  
 
 output "instances_ip_addr" {
-  value = ["${yandex_compute_instance_group.bingo-group.instance_template[0].network_interface[0].ip_address}", "${yandex_compute_instance_group.bingo-group.instance_template[0].network_interface[0].ip_address}"]
+  value =["${yandex_compute_instance_group.bingo-group.instances[0].network_interface[0].ip_address}", "${yandex_compute_instance_group.bingo-group.instances[1].network_interface[0].ip_address}"]
 }
 

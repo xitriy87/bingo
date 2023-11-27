@@ -7,8 +7,8 @@ resource "yandex_compute_instance" "bingo-db" {
     name = "bingo-db"
 #    service_account_id = yandex_iam_service_account.service-accounts["alexeit-catgpt-sa"].id
     resources {
-      cores         = 4
-      memory        = 4
+      cores         = 2
+      memory        = 2
       core_fraction = 50
     }
     scheduling_policy {
