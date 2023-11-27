@@ -1,0 +1,36 @@
+#cloud-config
+write_files:
+  - path: /home/ubuntu/.ssh/yc-test
+    permissions: '0600'
+    owner: ubuntu:ubuntu
+    defer: true
+    encoding: base64
+    content: |
+      LS0tLS1CRUdJTiBPUEVOU1NIIFBSSVZBVEUgS0VZLS0tLS0KYjNCbGJuTnphQzFyWlhrdGRqRUFB
+      QUFBQkc1dmJtVUFBQUFFYm05dVpRQUFBQUFBQUFBQkFBQUFNd0FBQUF0emMyZ3RaVwpReU5UVXhP
+      UUFBQUNBaXNnTmhhcGhIRW9FeWFlN2tjeGpxZjliSGE4dEZUdTFaS2hzbkZLWFRDUUFBQUppT1VB
+      MHdqbEFOCk1BQUFBQXR6YzJndFpXUXlOVFV4T1FBQUFDQWlzZ05oYXBoSEVvRXlhZTdrY3hqcWY5
+      YkhhOHRGVHUxWktoc25GS1hUQ1EKQUFBRUNxUllrZEZaZkZ1UnVFNjNqVlNMWlFwSEJmVnpjUndv
+      dXQ3OG5UYlVud1p5S3lBMkZxbUVjU2dUSnA3dVJ6R09wLwoxc2RyeTBWTzdWa3FHeWNVcGRNSkFB
+      QUFFbUZzWlhobGFYUkFZV3hsZUdWcGRDMVFRd0VDQXc9PQotLS0tLUVORCBPUEVOU1NIIFBSSVZB
+      VEUgS0VZLS0tLS0K
+  - path: /home/ubuntu/.ssh/config
+    permissions: '600'
+    owner: ubuntu:ubuntu
+    defer: true
+    content: |
+      Host *
+      IdentityFile /home/ubuntu/.ssh/yc-test
+  - path: /home/ubuntu/.ansible.cfg
+    permissions: '644'
+    owner: ubuntu:ubuntu
+    defer: true
+    content: |
+      [defaults]
+      host_key_checking = False
+      allow_world_readable_tmpfiles=true
+packages:
+  - git
+  - ansible
+    #runcmd:
+    #- sed -i '1 aallow_world_readable_tmpfiles=true' /home/ubuntu/.ansible.cfg

@@ -1,0 +1,11 @@
+version: '3.7'
+services:
+  catgpt:
+    container_name: bingo
+    image: "cr.yandex/crp10pq00qo5b4oh3tvv/bingo:v1"
+    command: ['/bin/sh','-c','./bingo run_server']
+    restart: always
+    network_mode: "host"
+    volumes:
+      - '/opt/bingo/logs/':'/opt/bongo/logs/359c71e299/'
+

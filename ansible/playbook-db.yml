@@ -1,0 +1,10 @@
+---
+- name: DB
+  become: yes
+  become_method: sudo
+  become_user: root
+  hosts:
+    - db
+  gather_facts: true
+  roles:
+    - db

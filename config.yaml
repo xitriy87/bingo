@@ -1,0 +1,10 @@
+student_email: a.timoshenko@tssltd.ru
+postgres_cluster:
+  hosts:
+  - address: 10.10.10.20
+    port: 5432
+  user: bingo
+  password: bingo
+  db_name: bingo
+  ssl_mode: disable
+  use_closest_node: false

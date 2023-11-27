@@ -1,0 +1,56 @@
+---
+# tasks file for db
+
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ DB_PACKAGES }}"
+    state: present
+    update_cache: yes
+- name: Add postgresql repo
+  ansible.builtin.shell: 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
+  poll: 5
+  async: 5
+- name: Add repo key
+  ansible.builtin.shell: "wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -"
+  poll: 5
+  async: 5
+- name: Install postgresql
+  ansible.builtin.apt:
+    name: "{{ PG_VERSION }}"
+    update_cache: yes
+- name: add postgresql.conf
+  ansible.builtin.template:
+    src: "postgresql.j2"
+    dest: "/etc/postgresql/16/main/postgresql.conf"
+    owner: "postgres"
+    group: "postgres"
+    mode: "644"
+  notify:
+    - postgres-restart
+- name: add pg_hba.conf
+  ansible.builtin.template:
+    src: "pg_hba.j2"
+    dest: "/etc/postgresql/16/main/pg_hba.conf"
+    owner: "postgres"
+    group: "postgres"
+    mode: "640"
+  notify:
+    - postgres-restart
+- name: Create bing ROLE bingo
+  become_user: postgres
+  postgresql_user:
+    name: "{{ db_user }}"
+    password: "{{ db_pass  }}"
+    role_attr_flags: LOGIN
+    state: present
+  tags:
+    - psql
+- name: Create DB bingo
+  become_user: postgres
+  postgresql_db:
+    name: "{{ db_name }}"
+    owner: "{{ db_user }}"
+  tags:
+    - psql
+
+

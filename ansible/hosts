@@ -1,0 +1,7 @@
+#db ansible_host=
+db ansible_host=10.10.10.20
+lb ansible_host=10.10.10.10
+[BINGO]
+
+lb
+db

@@ -1,0 +1,8 @@
+version: '3.7'
+services:
+  catgpt:
+    container_name: bingo-prep
+    image: "cr.yandex/crp10pq00qo5b4oh3tvv/bingo:v1"
+    command: ['/bin/sh','-c','./bingo prepare_db','&&','exit','1']
+    network_mode: "host"
+
