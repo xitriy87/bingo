@@ -32,3 +32,7 @@ resource "yandex_compute_instance" "bingo-db-prep" {
       ssh-keys  = "ubuntu:${file("~/.ssh/yc-test.pub")}"
     }
 }
+
+#output db_prepare_ip {
+#  value = "${yandex_compute_instance.bingo-db-prep[0].network_interface[0].ip_address}"
+#}

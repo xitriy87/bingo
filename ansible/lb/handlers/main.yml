@@ -1,0 +1,10 @@
+---
+# handlers file for lb
+- name: nginx_restart
+  ansible.builtin.systemd:
+    name: nginx
+    state: restarted
+- name: restart_cron
+  ansible.builtin.systemd:
+    name: cron
+    state: restarted

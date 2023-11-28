@@ -1,0 +1,59 @@
+---
+# tasks file for lb
+#- name: Install nginx
+#  ansible.builtin.apt:
+#    name: nginx
+#    state: present
+#    update_cache: yes
+- name: Install packages
+  ansible.builtin.apt:
+    name: "{{ LB_PACKAGES }}"
+    state: present
+    update_cache: yes
+- name: Import sign key for repo nginx
+  shell: "curl https://nginx.org/keys/nginx_signing.key | gpg --dearmor | sudo tee /usr/share/keyrings/nginx-archive-keyring.gpg >/dev/null"
+- name: Add repository mainline for quic support
+  shell: "echo \"deb [signed-by=/usr/share/keyrings/nginx-archive-keyring.gpg] http://nginx.org/packages/mainline/ubuntu `lsb_release -cs` nginx\" | sudo tee /etc/apt/sources.list.d/nginx.list"
+- name: Install nginx 1.25
+  ansible.builtin.apt:
+    name: nginx
+    state: present
+    update_cache: yes
+- name: Copy ssl key
+  ansible.builtin.copy:
+    src: "privkey.pem"
+    dest: "/etc/nginx/privkey.pem"
+    owner: "root"
+    group: "root"
+    mode: "0600"
+- name: Copy ssl cert
+  ansible.builtin.copy:
+    src: "fullchain.pem"
+    dest: "/etc/nginx/fullchain.pem"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+- name: Create chace directory
+  ansible.builtin.file:
+    path: "/var/cache/nginx"
+    owner: "www-data"
+    group: "www-data"
+    state: directory
+    mode: "0770"
+  notify: nginx_restart
+- name: config file
+  ansible.builtin.template:
+    src: "nginx-conf.j2"
+    dest: "/etc/nginx/conf.d/default.conf"
+  notify: nginx_restart
+- name: Create logrotate
+  ansible.builtin.copy:
+    src: "logrotate-nginx"
+    dest: "/etc/logrotate.d/nginx"
+    owner: "root"
+    group: "root"
+    mode: "0644"
+- name: Add logrotate nginx in cron
+  shell: "sed -i '20 a */30 * * * * root /usr/sbin/logrotate /etc/logrotate.d/nginx' /etc/crontab"
+  notify: restart_cron
+

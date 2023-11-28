@@ -1,7 +1,18 @@
 #cloud-config
 packages:
   - ntp
+write_files:
+  - path: /etc/ntp.conf
+    permissions: '0644'
+    owner: root:root
+    defer: true
+    content: |
+      server ntp0.ntp-servers.net iburst
+      server ntp1.ntp-servers.net iburst
+      server ntp2.ntp-servers.net iburst
+      server ntp3.ntp-servers.net iburst
 runcmd:
   - sudo mkdir -p /opt/bingo/logs/ && sudo chown -R ubuntu:ubuntu /opt/bingo/logs/
-  - sudo sed -i '20 a */1 * * * * ubuntu :> /opt/bingo/logs/main.log' /etc/crontab
+  - sudo sed -i '20 a */2 * * * * ubuntu :> /opt/bingo/logs/main.log' /etc/crontab
   - sudo systemctl restart cron
+  - sudo systemctl restart ntp

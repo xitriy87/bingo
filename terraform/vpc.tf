@@ -37,8 +37,37 @@ resource "yandex_vpc_security_group" "bingo-sg" {
   ingress {
     protocol = "TCP"
     v4_cidr_blocks = ["10.10.10.0/24","10.10.100.0/24"]
+    port = 20061
+  }
+  ingress {
+    protocol = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port = 123
+  }
+  egress {
+    protocol = "TCP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
     from_port = 0
     to_port = 65535
+  }
+  egress {
+    protocol = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    #from_port = 0
+    #to_port = 65535
+    port = 123
+  }
+}
+
+resource "yandex_vpc_security_group" "db-sg" {
+  name = "db-sg"
+  description = "sg for db instance"
+  network_id = "${yandex_vpc_network.bingo.id}"
+
+  ingress {
+    protocol = "TCP"
+    v4_cidr_blocks = ["10.10.10.0/24","10.10.100.0/24"]
+    port = 5432
   }
 
   egress {
@@ -49,4 +78,59 @@ resource "yandex_vpc_security_group" "bingo-sg" {
   }
 }
 
+resource "yandex_vpc_security_group" "ssh-sg" {
+  name = "ssh-sg"
+  description = "sg for ssh"
+  network_id = "${yandex_vpc_network.bingo.id}"
 
+  ingress {
+    protocol = "TCP"
+    v4_cidr_blocks = ["10.10.10.0/24","10.10.100.0/24"]
+    port = 22
+  }
+
+  egress {
+    protocol = "TCP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 65535
+  }
+}
+
+resource "yandex_vpc_security_group" "lb-sg" {
+  name = "lb-sg"
+  description = "sg for lb instance"
+  network_id = "${yandex_vpc_network.bingo.id}"
+
+  ingress {
+    protocol = "TCP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port = 80
+  }
+  ingress {
+    protocol = "TCP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port = 443
+  }
+  ingress {
+    protocol = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    port = 443
+  }
+
+  egress {
+    protocol = "TCP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    from_port = 0
+    to_port = 65535
+  }
+  egress {
+    protocol = "UDP"
+    v4_cidr_blocks = ["0.0.0.0/0"]
+    #from_port = 0
+    #to_port = 65535
+    port = 443
+  }
+
+
+}

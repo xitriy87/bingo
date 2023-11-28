@@ -1,0 +1,45 @@
+---
+- name: DB
+  become: yes
+  become_method: sudo
+  become_user: postgres
+  hosts:
+    - db
+  gather_facts: true
+  tasks:
+    - name: Create index customer
+      postgresql_idx:
+        db: "bingo"
+        table: "customers"
+        columns:
+          - "name"
+          - "surname"
+          - "birthday"
+          - "id"
+        idxname: "~customers-a3673268"
+        concurrent: yes
+    - name: Create index customer id
+      postgresql_idx:
+        db: "bingo"
+        table: "customers"
+        columns:
+          - "id"
+        idxname: "~customers-9fccd81c"
+        concurrent: yes
+    - name: Create index movies
+      postgresql_idx:
+        db: "bingo"
+        table: "movies"
+        columns:
+          - "id"
+        idxname: "~movies-9fccd81c"
+        concurrent: yes
+    - name: Create index sessions
+      postgresql_idx:
+        db: "bingo"
+        table: "sessions"
+        columns:
+          - "id"
+        idxname: "~sessions-9fccd81c"
+        concurrent: yes
+

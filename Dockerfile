@@ -5,5 +5,4 @@ WORKDIR /opt/bingo/
 COPY bingo .
 COPY config.yaml .
 EXPOSE 20061
-#HEALTHCHECK --interval=10s --timeout=10s --start-period=80s  CMD curl -I -X GET http://localhost:20061/ping || exit 1
 CMD ["/bin/sh","-c","./bingo prepare_db ; ./bingo run_server"]

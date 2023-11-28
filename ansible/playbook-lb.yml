@@ -1,0 +1,10 @@
+---
+- name: LB
+  become: yes
+  become_method: sudo
+  become_user: root
+  hosts:
+    - lb
+  gather_facts: true
+  roles:
+    - lb

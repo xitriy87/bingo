@@ -4,5 +4,6 @@ DB_PACKAGES: ["wget","gpg","python3-psycopg2"]
 ADD_REPO: 'echo "deb https://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list" && wget --quiet -O - https://www.postgresql.org/media/keys/ACCC4CF8.asc | apt-key add -'
 PG_VERSION: "postgresql-16"
 
-DB_MAX_CONN: 100
-DB_SHARED_BUFF: "128MB"
+DB_MAX_CONN: 200
+DB_SHARED_BUFF: "512MB"
+DB_WORK_MEM: "16MB"

@@ -9,12 +9,13 @@ resource "yandex_compute_instance" "bingo-lb" {
       core_fraction = 50
     }
     scheduling_policy {
-#      preemptible = true
+      preemptible = false
     }
     network_interface {
       subnet_id = "${yandex_vpc_subnet.bingo-static.id}"
       nat = true
-      #ip_address = "10.10.10.10"
+      ip_address = "10.10.10.10"
+      security_group_ids = [yandex_vpc_security_group.lb-sg.id,yandex_vpc_security_group.ssh-sg.id]
     }
     boot_disk {
       initialize_params {

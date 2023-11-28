@@ -1,0 +1,6 @@
+---
+# vars file for lb
+BINGO_IP_1: "10.10.100.6"
+BINGO_IP_2: "10.10.100.23"
+SERVER_NAME: "bingo.xitriy87test.ru"
+LB_PACKAGES: ["gnupg2","ca-certificates","lsb-release","ubuntu-keyring","curl"]

@@ -1,18 +1,26 @@
 version: '3.7'
 services:
-  catgpt:
+  bingo:
     container_name: bingo
     image: "cr.yandex/crp10pq00qo5b4oh3tvv/bingo:v1"
     #image: "bingo-test:v2"
     command: ['/bin/sh','-c','./bingo run_server']
     restart: always
+    labels:
+      "autoheal": "true"
     network_mode: "host"
     volumes:
       - "/opt/bingo/logs:/opt/bongo/logs/359c71e299/"
     healthcheck:
       test: ["CMD-SHELL","curl -f http://localhost:20061/ping || exit 1"]
-      interval: 10s
-      timeout: 5s
+      interval: 8s
+      timeout: 8s
       retries: 2
-      start_period: 50s
-
+      start_period: 22s
+  autoheal:
+    image: willfarrell/autoheal
+    container_name: autoheal
+    volumes:
+      - '/var/run/docker.sock:/var/run/docker.sock'
+    environment:
+      - AUTOHEAL_INTERVAL=3
