@@ -70,9 +70,21 @@ BINGO_IP_1: "10.10.100.6"
 BINGO_IP_2: "10.10.100.23"
 SERVER_NAME: "bingo.xitriy87test.ru"
 ```
+Добавляем ключи SSL в директорию роли lb/files/
+
+```
+privkey.pem
+fullchain.pem
+```
+
 ```
 $ansible-playbook -i hosts playbook-lb.yml
 ```
 11. **Далее настраиваем DNS-запись типа A для вашего домена с указанием внешнего ip-адреса ресурса lb**
 
+12. **Удаляем ansible хост**
+
+```
+$terraform destroy -var-file=var.tfvars -target yandex_compute_instance.bingo-ansible
+```
 
