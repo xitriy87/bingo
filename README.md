@@ -15,7 +15,7 @@ postgres_cluster:
 ```  
 2. **Dockerfile bingo**
 ```
-FROM alpine
+FROM alpine:3.18
 RUN addgroup -g 1000 bingo && adduser -S -u 1000 -G bingo bingo -h /opt/bingo/  \
 && mkdir -p /opt/bongo/logs/359c71e299 && chown -R bingo:bingo /opt/bongo \
 && apk add curl && rm -rf /var/cache/apk/*
