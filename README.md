@@ -26,6 +26,17 @@ COPY config.yaml .
 EXPOSE 20061
 CMD ["/bin/sh","-c","./bingo prepare_db ; ./bingo run_server"]
 ```
+Собираем образ контейнера
+```
+docker build . -t  bingo:v1
+```
+Будем использовать registry yandex, для этого создаем в своем каталоге container registy и загружаем туда собранный контейнер
+```
+docker tag bingo:v1 cr.yandex/crp10pq00qo5b4oh3tvv/bingo:v1
+docker push cr.yandex/crp10pq00qo5b4oh3tvv/bingo:v1
+```
+И прописываем его в качестве image в файле docker-compose.
+
 3. **Разворачиваем через terraform сервера db и ansible**
 ```
 $terraform apply -var-file=var.tfvars -target yandex_compute_instance.bingo-db -target yandex_compute_instance.bingo-ansible
